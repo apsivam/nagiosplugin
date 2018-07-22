@@ -19,6 +19,7 @@ func Exit(status Status, message string) {
 
 // Check represents the state of a Nagios check.
 type Check struct {
+	name         string
 	results      []Result
 	perfdata     []PerfDatum
 	status       Status
@@ -123,7 +124,12 @@ func (c Check) exitInfoText() string {
 // String representation of the check results, suitable for output and
 // parsing by Nagios.
 func (c Check) String() string {
-	value := fmt.Sprintf("%v: %s", c.status, c.exitInfoText())
+	value := ""
+	if c.name != "" {
+		value += fmt.Sprintf("%s %v: %s", c.name, c.status, c.exitInfoText())
+	} else {
+		value += fmt.Sprintf("%v: %s", c.status, c.exitInfoText())
+	}
 	value += RenderPerfdata(c.perfdata)
 	return value
 }
@@ -159,4 +165,10 @@ func (c *Check) Criticalf(format string, v ...interface{}) {
 // UNKNOWN and the message provided.
 func (c *Check) Unknownf(format string, v ...interface{}) {
 	c.Exitf(UNKNOWN, format, v...)
+}
+
+// SetName sets the name of the plugin
+// which is prefixed on output
+func (c *Check) SetName(name string) {
+	c.name = name
 }
