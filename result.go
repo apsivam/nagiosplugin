@@ -70,13 +70,13 @@ func NewStatusPolicy(statuses []Status) (*statusPolicy, error) {
 func (s Status) String() string {
 	switch s {
 	case OK:
-		return "OK"
+		return "[OK]"
 	case WARNING:
-		return "WARNING"
+		return "[WARNING]"
 	case CRITICAL:
-		return "CRITICAL"
+		return "[CRITICAL]"
 	case UNKNOWN:
-		return "UNKNOWN"
+		return "[UNKNOWN]"
 	}
 	panic("Invalid nagiosplugin.Status.")
 }
